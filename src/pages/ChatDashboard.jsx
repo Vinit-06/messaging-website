@@ -145,25 +145,25 @@ const ChatDashboard = () => {
       />
 
       {/* Chat List */}
-      <div className={`${sidebarCollapsed ? 'w-16' : 'w-80'} transition-all duration-300 flex-shrink-0`}>
-        <div className="p-4">
-          <SupabaseStatus />
+      {!sidebarCollapsed && (
+        <div className="w-80 transition-all duration-300 flex-shrink-0">
+          <div className="p-4">
+            <SupabaseStatus />
+          </div>
+          <EnhancedChatList
+            activeChat={activeChat}
+            onChatSelect={handleChatSelect}
+            onCreateChat={handleCreateChat}
+          />
         </div>
-        <ChatList
-          chats={chats}
-          activeChat={activeChat}
-          onChatSelect={handleChatSelect}
-          onNewChat={handleNewChat}
-          collapsed={sidebarCollapsed}
-        />
-      </div>
+      )}
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {activeChat ? (
-          <ChatWindow 
+          <EnhancedChatWindow
             chat={activeChat}
-            user={user}
+            onClose={() => setActiveChat(null)}
           />
         ) : (
           <div className="flex-1 flex items-center justify-center glass-chat-window relative overflow-hidden m-4 mr-6">
