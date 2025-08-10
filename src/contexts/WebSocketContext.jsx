@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react'
 import { io } from 'socket.io-client'
 import { useAuth } from './AuthContext'
+import { webSocketDemo, isWebSocketDemo } from '../lib/websocket-demo'
 
 const WebSocketContext = createContext({})
 
