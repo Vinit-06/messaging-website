@@ -119,7 +119,7 @@ const ChatDashboard = () => {
     )
   }
 
-  const handleNewChat = (chatData) => {
+  const handleCreateChat = (chatData) => {
     setChats(prevChats => [chatData, ...prevChats])
     setActiveChat(chatData)
   }
