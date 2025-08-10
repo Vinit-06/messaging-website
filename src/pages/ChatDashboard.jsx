@@ -142,7 +142,7 @@ const ChatDashboard = () => {
       />
 
       {/* Chat List */}
-      <div className={`${sidebarCollapsed ? 'w-16' : 'w-80'} transition-all duration-300 border-r border-gray-200 bg-white flex-shrink-0`}>
+      <div className={`${sidebarCollapsed ? 'w-16' : 'w-80'} transition-all duration-300 flex-shrink-0`}>
         <ChatList
           chats={chats}
           activeChat={activeChat}
