@@ -111,7 +111,12 @@ export const AuthProvider = ({ children }) => {
     setLoading(true)
     try {
       // Check if we're in demo mode
-      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+      const isDemo = supabase.supabaseUrl.includes('demo-project') ||
+                     supabase.supabaseUrl.includes('your-project') ||
+                     supabase.supabaseAnonKey.includes('demo') ||
+                     supabase.supabaseAnonKey.includes('your-');
+
+      if (isDemo) {
         await new Promise(resolve => setTimeout(resolve, 1000))
         return {
           data: {
@@ -145,7 +150,12 @@ export const AuthProvider = ({ children }) => {
     setLoading(true)
     try {
       // Check if we're in demo mode
-      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+      const isDemo = supabase.supabaseUrl.includes('demo-project') ||
+                     supabase.supabaseUrl.includes('your-project') ||
+                     supabase.supabaseAnonKey.includes('demo') ||
+                     supabase.supabaseAnonKey.includes('your-');
+
+      if (isDemo) {
         await new Promise(resolve => setTimeout(resolve, 1000))
         const demoUser = {
           id: `demo-${provider}-user`,
@@ -180,7 +190,12 @@ export const AuthProvider = ({ children }) => {
     setLoading(true)
     try {
       // Check if we're in demo mode
-      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+      const isDemo = supabase.supabaseUrl.includes('demo-project') ||
+                     supabase.supabaseUrl.includes('your-project') ||
+                     supabase.supabaseAnonKey.includes('demo') ||
+                     supabase.supabaseAnonKey.includes('your-');
+
+      if (isDemo) {
         await new Promise(resolve => setTimeout(resolve, 500))
         setUser(null)
         setSession(null)
