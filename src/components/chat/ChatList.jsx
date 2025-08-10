@@ -58,30 +58,33 @@ const ChatList = ({ chats, activeChat, onChatSelect, onNewChat, collapsed }) => 
 
   if (collapsed) {
     return (
-      <div className="h-full flex flex-col items-center py-4">
+      <div className="h-full flex flex-col items-center py-6 glass-strong backdrop-blur-md relative overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-2xl -translate-x-4 -translate-y-4"></div>
+
         <button
           onClick={() => setShowCreateModal(true)}
-          className="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white mb-4 transition-colors"
+          className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-xl flex items-center justify-center text-white mb-6 transition-all duration-300 shadow-lg shadow-blue-500/25 floating-element"
           title="New Chat"
         >
           <Plus className="w-5 h-5" />
         </button>
-        
-        <div className="space-y-2 flex-1 overflow-y-auto">
+
+        <div className="space-y-3 flex-1 overflow-y-auto">
           {filteredChats.slice(0, 5).map((chat) => (
             <button
               key={chat.id}
               onClick={() => onChatSelect(chat)}
-              className={`relative w-10 h-10 rounded-full transition-all ${
-                activeChat?.id === chat.id 
-                  ? 'ring-2 ring-blue-500 ring-offset-2' 
-                  : 'hover:ring-2 hover:ring-gray-300 hover:ring-offset-2'
+              className={`relative w-12 h-12 rounded-xl transition-all duration-300 floating-element ${
+                activeChat?.id === chat.id
+                  ? 'ring-2 ring-blue-400 ring-offset-2 ring-offset-transparent shadow-lg shadow-blue-500/30'
+                  : 'hover:ring-2 hover:ring-white/30 hover:ring-offset-2 hover:ring-offset-transparent'
               }`}
               title={chat.name}
             >
               <ChatAvatar chat={chat} />
               {chat.unreadCount > 0 && (
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full flex items-center justify-center border-2 border-white shadow-lg">
                   {chat.unreadCount > 9 ? '9+' : chat.unreadCount}
                 </div>
               )}
