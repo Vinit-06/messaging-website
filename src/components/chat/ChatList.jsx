@@ -139,7 +139,7 @@ const ChatList = ({ chats, activeChat, onChatSelect, onNewChat, collapsed }) => 
               <button
                 key={chat.id}
                 onClick={() => onChatSelect(chat)}
-                className={`w-full p-4 hover:bg-gray-50 transition-colors ${
+                className={`group w-full p-4 hover:bg-gray-50 transition-colors ${
                   activeChat?.id === chat.id ? 'bg-blue-50 border-r-2 border-blue-500' : ''
                 }`}
               >
