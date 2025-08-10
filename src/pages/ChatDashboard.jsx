@@ -144,6 +144,9 @@ const ChatDashboard = () => {
 
       {/* Chat List */}
       <div className={`${sidebarCollapsed ? 'w-16' : 'w-80'} transition-all duration-300 flex-shrink-0`}>
+        <div className="p-4">
+          <SupabaseStatus />
+        </div>
         <ChatList
           chats={chats}
           activeChat={activeChat}
