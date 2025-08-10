@@ -21,8 +21,12 @@ function App() {
         <Router>
           <div className="app">
             {isDemoMode && (
-              <div className="fixed top-0 left-0 right-0 bg-yellow-100 border-b border-yellow-300 text-yellow-800 px-4 py-2 text-center text-sm z-50">
-                <strong>Demo Mode:</strong> Using mock data. Configure Supabase to enable full functionality.
+              <div className="fixed top-0 left-0 right-0 demo-banner px-6 py-3 text-center text-sm z-50 border-b border-white/20">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-2 h-2 bg-white/80 rounded-full animate-pulse"></div>
+                  <strong>Demo Mode:</strong> Using mock data. Configure Supabase to enable full functionality.
+                  <div className="w-2 h-2 bg-white/80 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                </div>
               </div>
             )}
             <div className={isDemoMode ? 'pt-10' : ''}>
