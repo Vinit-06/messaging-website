@@ -72,7 +72,12 @@ export const AuthProvider = ({ children }) => {
     setLoading(true)
     try {
       // Check if we're in demo mode (no proper Supabase config)
-      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+      const isDemo = supabase.supabaseUrl.includes('demo-project') ||
+                     supabase.supabaseUrl.includes('your-project') ||
+                     supabase.supabaseAnonKey.includes('demo') ||
+                     supabase.supabaseAnonKey.includes('your-');
+
+      if (isDemo) {
         // Demo mode - simulate successful login
         await new Promise(resolve => setTimeout(resolve, 1000))
         const demoUser = {
