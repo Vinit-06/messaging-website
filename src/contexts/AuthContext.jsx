@@ -71,6 +71,24 @@ export const AuthProvider = ({ children }) => {
   const signInWithEmail = async (email, password) => {
     setLoading(true)
     try {
+      // Check if we're in demo mode (no proper Supabase config)
+      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+        // Demo mode - simulate successful login
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        const demoUser = {
+          id: 'demo-user-123',
+          email: email,
+          user_metadata: {
+            full_name: 'Demo User',
+            avatar_url: null
+          },
+          created_at: new Date().toISOString()
+        }
+        setUser(demoUser)
+        setSession({ user: demoUser })
+        return { data: { user: demoUser }, error: null }
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
