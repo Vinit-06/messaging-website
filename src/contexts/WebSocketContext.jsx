@@ -37,57 +37,63 @@ export const WebSocketProvider = ({ children }) => {
   const connectSocket = () => {
     if (socket?.connected) return
 
-    const newSocket = io(import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:3001', {
-      auth: {
-        userId: user?.id,
-        userEmail: user?.email,
-        userMetadata: user?.user_metadata
-      },
-      transports: ['websocket', 'polling']
-    })
+    try {
+      const newSocket = io(import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:3001', {
+        auth: {
+          userId: user?.id,
+          userEmail: user?.email,
+          userMetadata: user?.user_metadata
+        },
+        transports: ['websocket', 'polling'],
+        timeout: 5000
+      })
 
-    newSocket.on('connect', () => {
-      console.log('WebSocket connected')
-      setConnected(true)
-      setSocket(newSocket)
-      reconnectAttemptsRef.current = 0
-    })
+      newSocket.on('connect', () => {
+        console.log('WebSocket connected')
+        setConnected(true)
+        setSocket(newSocket)
+        reconnectAttemptsRef.current = 0
+      })
 
-    newSocket.on('disconnect', (reason) => {
-      console.log('WebSocket disconnected:', reason)
+      newSocket.on('disconnect', (reason) => {
+        console.log('WebSocket disconnected:', reason)
+        setConnected(false)
+
+        // Auto-reconnect on certain disconnect reasons
+        if (reason === 'io server disconnect') {
+          // Server disconnected, don't reconnect
+          return
+        }
+
+        // Attempt to reconnect
+        if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+          const timeout = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 30000)
+          reconnectTimeoutRef.current = setTimeout(() => {
+            reconnectAttemptsRef.current++
+            connectSocket()
+          }, timeout)
+        }
+      })
+
+      newSocket.on('online-users', (users) => {
+        setOnlineUsers(users)
+      })
+
+      newSocket.on('user-typing', ({ userId, chatId, isTyping }) => {
+        setTypingUsers(prev => ({
+          ...prev,
+          [`${chatId}-${userId}`]: isTyping ? { userId, chatId } : undefined
+        }))
+      })
+
+      newSocket.on('connect_error', (error) => {
+        console.warn('WebSocket connection failed (demo mode):', error.message)
+        setConnected(false)
+      })
+    } catch (error) {
+      console.warn('WebSocket initialization failed (demo mode):', error.message)
       setConnected(false)
-      
-      // Auto-reconnect on certain disconnect reasons
-      if (reason === 'io server disconnect') {
-        // Server disconnected, don't reconnect
-        return
-      }
-      
-      // Attempt to reconnect
-      if (reconnectAttemptsRef.current < maxReconnectAttempts) {
-        const timeout = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 30000)
-        reconnectTimeoutRef.current = setTimeout(() => {
-          reconnectAttemptsRef.current++
-          connectSocket()
-        }, timeout)
-      }
-    })
-
-    newSocket.on('online-users', (users) => {
-      setOnlineUsers(users)
-    })
-
-    newSocket.on('user-typing', ({ userId, chatId, isTyping }) => {
-      setTypingUsers(prev => ({
-        ...prev,
-        [`${chatId}-${userId}`]: isTyping ? { userId, chatId } : undefined
-      }))
-    })
-
-    newSocket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error)
-      setConnected(false)
-    })
+    }
   }
 
   const disconnectSocket = () => {
