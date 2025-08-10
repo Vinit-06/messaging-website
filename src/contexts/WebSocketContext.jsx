@@ -36,7 +36,14 @@ export const WebSocketProvider = ({ children }) => {
   }, [isAuthenticated, user])
 
   const connectSocket = () => {
-    if (socket?.connected) return
+    if (socket?.connected || webSocketDemo.connected) return
+
+    // Check if we should use demo mode
+    if (isWebSocketDemo()) {
+      console.log('Using WebSocket demo mode')
+      connectDemoSocket()
+      return
+    }
 
     try {
       const newSocket = io(import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:3001', {
@@ -50,7 +57,7 @@ export const WebSocketProvider = ({ children }) => {
       })
 
       newSocket.on('connect', () => {
-        console.log('WebSocket connected')
+        console.log('Real WebSocket connected')
         setConnected(true)
         setSocket(newSocket)
         reconnectAttemptsRef.current = 0
@@ -60,9 +67,10 @@ export const WebSocketProvider = ({ children }) => {
         console.log('WebSocket disconnected:', reason)
         setConnected(false)
 
-        // Auto-reconnect on certain disconnect reasons
+        // Auto-reconnect on certain disconnect reasons or fallback to demo
         if (reason === 'io server disconnect') {
-          // Server disconnected, don't reconnect
+          console.log('Server disconnected, switching to demo mode')
+          connectDemoSocket()
           return
         }
 
@@ -73,6 +81,9 @@ export const WebSocketProvider = ({ children }) => {
             reconnectAttemptsRef.current++
             connectSocket()
           }, timeout)
+        } else {
+          console.log('Max reconnection attempts reached, switching to demo mode')
+          connectDemoSocket()
         }
       })
 
@@ -88,13 +99,47 @@ export const WebSocketProvider = ({ children }) => {
       })
 
       newSocket.on('connect_error', (error) => {
-        console.warn('WebSocket connection failed (demo mode):', error.message)
+        console.warn('WebSocket connection failed, using demo mode:', error.message)
         setConnected(false)
+        // Fallback to demo mode
+        setTimeout(() => connectDemoSocket(), 1000)
       })
     } catch (error) {
-      console.warn('WebSocket initialization failed (demo mode):', error.message)
-      setConnected(false)
+      console.warn('WebSocket initialization failed, using demo mode:', error.message)
+      connectDemoSocket()
     }
+  }
+
+  const connectDemoSocket = () => {
+    console.log('Connecting to demo WebSocket...')
+
+    // Setup demo socket event handlers
+    webSocketDemo.on('connect', () => {
+      console.log('Demo WebSocket connected')
+      setConnected(true)
+      setSocket(null) // No real socket in demo mode
+      reconnectAttemptsRef.current = 0
+    })
+
+    webSocketDemo.on('disconnect', (reason) => {
+      console.log('Demo WebSocket disconnected:', reason)
+      setConnected(false)
+    })
+
+    webSocketDemo.on('online-users', (users) => {
+      setOnlineUsers(users)
+    })
+
+    webSocketDemo.on('user-typing', ({ userId, chatId, isTyping }) => {
+      setTypingUsers(prev => ({
+        ...prev,
+        [`${chatId}-${userId}`]: isTyping ? { userId, chatId } : undefined
+      }))
+    })
+
+    // Connect to demo socket
+    webSocketDemo.connect(user?.id, user?.user_metadata)
+    webSocketDemo.startRandomEvents()
   }
 
   const disconnectSocket = () => {
