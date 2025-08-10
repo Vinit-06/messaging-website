@@ -84,11 +84,24 @@ A modern, real-time messaging web application built with React, Supabase, and AI
    VITE_WEBSOCKET_URL=ws://localhost:3001
    ```
 
-4. **Set up Supabase**
-   - Create a new Supabase project
-   - Run the SQL migrations in `supabase/migrations/`
-   - Configure authentication providers
-   - Set up storage buckets
+4. **Set up Supabase** 📖 [Detailed Setup Guide](SUPABASE_SETUP.md)
+
+   **Quick Setup:**
+   ```bash
+   # Option 1: Use the setup script
+   node setup-supabase.js "https://your-project.supabase.co" "your-anon-key"
+
+   # Option 2: Manual setup
+   # 1. Create project at supabase.com
+   # 2. Copy Project URL and anon key to .env
+   # 3. Execute supabase-schema.sql in SQL Editor
+   ```
+
+   **Database Setup:**
+   - Execute the complete schema: `supabase-schema.sql`
+   - Configure Row Level Security policies
+   - Set up storage buckets for file uploads
+   - Enable real-time subscriptions
 
 5. **Start the development server**
    ```bash
