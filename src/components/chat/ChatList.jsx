@@ -164,9 +164,25 @@ const ChatList = ({ chats, activeChat, onChatSelect, onNewChat, collapsed }) => 
                             {formatTime(chat.lastMessageTime)}
                           </span>
                         )}
-                        <button className="p-1 hover:bg-gray-200 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div
+                          className="p-1 hover:bg-gray-200 rounded opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            // Handle menu action here
+                          }}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              // Handle menu action here
+                            }
+                          }}
+                          aria-label="Chat options"
+                        >
                           <MoreVertical className="w-3 h-3 text-gray-400" />
-                        </button>
+                        </div>
                       </div>
                     </div>
                     
