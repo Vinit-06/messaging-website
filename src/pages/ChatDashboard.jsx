@@ -130,7 +130,8 @@ const ChatDashboard = () => {
   }
 
   return (
-    <div className="h-screen flex bg-gray-50 overflow-hidden">
+    <div className="h-screen flex overflow-hidden relative"
+         style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)'}}>
       {/* Sidebar */}
       <Sidebar
         collapsed={sidebarCollapsed}
