@@ -19,36 +19,53 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession()
-      if (error) {
-        console.error('Error getting session:', error)
-      } else {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+        if (error) {
+          console.warn('Supabase auth error (using demo mode):', error.message)
+          // In demo mode, just set loading to false
+          setLoading(false)
+          return
+        }
         setSession(session)
         setUser(session?.user ?? null)
+        setLoading(false)
+      } catch (err) {
+        console.warn('Auth initialization failed (using demo mode):', err.message)
+        setLoading(false)
       }
-      setLoading(false)
     }
 
     getInitialSession()
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session)
-        setUser(session?.user ?? null)
-        setLoading(false)
-        
-        if (event === 'SIGNED_IN') {
-          // Redirect to dashboard after successful login
-          window.location.href = '/dashboard'
-        } else if (event === 'SIGNED_OUT') {
-          // Redirect to login after logout
-          window.location.href = '/login'
-        }
-      }
-    )
+    let subscription
+    try {
+      const { data } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          setSession(session)
+          setUser(session?.user ?? null)
+          setLoading(false)
 
-    return () => subscription.unsubscribe()
+          if (event === 'SIGNED_IN') {
+            // Redirect to dashboard after successful login
+            window.location.href = '/dashboard'
+          } else if (event === 'SIGNED_OUT') {
+            // Redirect to login after logout
+            window.location.href = '/login'
+          }
+        }
+      )
+      subscription = data.subscription
+    } catch (err) {
+      console.warn('Auth listener setup failed (using demo mode):', err.message)
+    }
+
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe()
+      }
+    }
   }, [])
 
   const signInWithEmail = async (email, password) => {
