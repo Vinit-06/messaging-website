@@ -68,6 +68,14 @@ const Login = () => {
                 <h1 className="text-2xl font-bold text-gray-900">ChatApp</h1>
               </div>
               <p className="text-gray-600">Welcome back! Sign in to continue.</p>
+              {(import.meta.env.VITE_SUPABASE_URL === 'https://demo-project.supabase.co' ||
+                !import.meta.env.VITE_SUPABASE_URL) && (
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-blue-700 text-sm">
+                    <strong>Demo Mode:</strong> Use any email/password to try the app
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Error Message */}
