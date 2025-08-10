@@ -108,21 +108,35 @@ const Sidebar = ({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4">
-        <ul className="space-y-2">
+      <nav className="flex-1 p-4 relative z-10">
+        <ul className="space-y-3">
           {navItems.map((item, index) => (
             <li key={index}>
               <button
                 onClick={item.onClick}
-                className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                  item.active 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                className={`group w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-300 floating-element ${
+                  item.active
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/25 border border-blue-400/30'
+                    : 'text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 border border-transparent backdrop-blur-sm'
                 } ${collapsed ? 'justify-center' : ''}`}
                 title={collapsed ? item.label : undefined}
               >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {!collapsed && <span className="font-medium">{item.label}</span>}
+                <div className={`p-1 rounded-lg transition-all duration-300 ${
+                  item.active
+                    ? 'bg-white/20'
+                    : 'group-hover:bg-white/10'
+                }`}>
+                  <item.icon className="w-4 h-4 flex-shrink-0" />
+                </div>
+                {!collapsed && (
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium text-sm">{item.label}</span>
+                    {item.active && <span className="text-xs text-white/60">Active</span>}
+                  </div>
+                )}
+                {item.active && (
+                  <div className="absolute right-2 w-2 h-2 bg-white/60 rounded-full animate-pulse"></div>
+                )}
               </button>
             </li>
           ))}
