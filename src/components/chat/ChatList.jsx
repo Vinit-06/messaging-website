@@ -100,29 +100,35 @@ const ChatList = ({ chats, activeChat, onChatSelect, onNewChat, collapsed }) => 
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col glass-strong backdrop-blur-md relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-blue-400/10 to-purple-400/10 rounded-full blur-3xl translate-x-20 -translate-y-20"></div>
+
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
+      <div className="p-6 border-b border-white/20 backdrop-blur-sm relative z-10">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-1">Messages</h2>
+            <p className="text-sm text-gray-600">Stay connected with everyone</p>
+          </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 floating-element"
             title="New Chat"
           >
-            <Plus className="w-5 h-5 text-gray-600" />
+            <Plus className="w-5 h-5" />
           </button>
         </div>
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="form-input pl-12 pr-4 py-3 glass border-white/30 backdrop-blur-md placeholder:text-gray-400"
           />
         </div>
       </div>
