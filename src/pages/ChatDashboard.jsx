@@ -8,6 +8,8 @@ import UserProfile from '../components/dashboard/UserProfile'
 import AIFeaturesPanel from '../components/ai/AIFeaturesPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import SupabaseStatus from '../components/SupabaseStatus'
+import EnhancedChatWindow from '../components/chat/EnhancedChatWindow'
+import EnhancedChatList from '../components/chat/EnhancedChatList'
 
 const ChatDashboard = () => {
   const [activeChat, setActiveChat] = useState(null)
