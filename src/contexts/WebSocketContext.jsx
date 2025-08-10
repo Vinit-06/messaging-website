@@ -147,11 +147,14 @@ export const WebSocketProvider = ({ children }) => {
       clearTimeout(reconnectTimeoutRef.current)
       reconnectTimeoutRef.current = null
     }
-    
+
     if (socket) {
       socket.disconnect()
       setSocket(null)
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.disconnect()
     }
+
     setConnected(false)
     setOnlineUsers([])
     setTypingUsers({})
@@ -166,30 +169,40 @@ export const WebSocketProvider = ({ children }) => {
         senderId: user?.id,
         timestamp: new Date().toISOString()
       })
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.sendMessage(chatId, message)
     }
   }
 
   const joinChat = (chatId) => {
     if (socket && connected) {
       socket.emit('join-chat', chatId)
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.joinChat(chatId)
     }
   }
 
   const leaveChat = (chatId) => {
     if (socket && connected) {
       socket.emit('leave-chat', chatId)
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.leaveChat(chatId)
     }
   }
 
   const setTyping = (chatId, isTyping) => {
     if (socket && connected) {
       socket.emit('typing', { chatId, isTyping })
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.setTyping(chatId, isTyping)
     }
   }
 
   const markMessageAsRead = (messageId, chatId) => {
     if (socket && connected) {
       socket.emit('mark-read', { messageId, chatId })
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.markAsRead(messageId, chatId)
     }
   }
 
@@ -198,6 +211,9 @@ export const WebSocketProvider = ({ children }) => {
     if (socket) {
       socket.on('new-message', callback)
       return () => socket.off('new-message', callback)
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.on('new-message', callback)
+      return () => webSocketDemo.off('new-message', callback)
     }
   }
 
@@ -205,6 +221,9 @@ export const WebSocketProvider = ({ children }) => {
     if (socket) {
       socket.on('message-read', callback)
       return () => socket.off('message-read', callback)
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.on('message-read', callback)
+      return () => webSocketDemo.off('message-read', callback)
     }
   }
 
@@ -212,6 +231,9 @@ export const WebSocketProvider = ({ children }) => {
     if (socket) {
       socket.on('user-status-change', callback)
       return () => socket.off('user-status-change', callback)
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.on('user-status-change', callback)
+      return () => webSocketDemo.off('user-status-change', callback)
     }
   }
 
@@ -219,6 +241,9 @@ export const WebSocketProvider = ({ children }) => {
     if (socket) {
       socket.on('chat-update', callback)
       return () => socket.off('chat-update', callback)
+    } else if (webSocketDemo.connected) {
+      webSocketDemo.on('chat-update', callback)
+      return () => webSocketDemo.off('chat-update', callback)
     }
   }
 
