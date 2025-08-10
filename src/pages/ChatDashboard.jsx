@@ -7,6 +7,7 @@ import ChatWindow from '../components/chat/ChatWindow'
 import UserProfile from '../components/dashboard/UserProfile'
 import AIFeaturesPanel from '../components/ai/AIFeaturesPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
+import SupabaseStatus from '../components/SupabaseStatus'
 
 const ChatDashboard = () => {
   const [activeChat, setActiveChat] = useState(null)
