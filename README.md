@@ -103,7 +103,17 @@ A modern, real-time messaging web application built with React, Supabase, and AI
    - Set up storage buckets for file uploads
    - Enable real-time subscriptions
 
-5. **Start the development server**
+5. **Configure AI Backend** 🤖 [AI Setup Guide](AI_BACKEND_SETUP.md)
+
+   **Quick AI Setup:**
+   ```bash
+   # Add AI API keys to .env
+   VITE_OPENAI_API_KEY=sk-your-openai-key
+   VITE_ANTHROPIC_API_KEY=your-anthropic-key
+   VITE_GOOGLE_TRANSLATE_API_KEY=your-google-key
+   ```
+
+6. **Start the development server**
    ```bash
    npm run dev
    ```
@@ -120,7 +130,7 @@ src/
 │   ├── AuthContext.jsx # Authentication state
 │   └── WebSocketContext.jsx # WebSocket management
 ├── hooks/              # Custom React hooks
-├── lib/                # Utility libraries
+├��─ lib/                # Utility libraries
 ├── pages/              # Route components
 ├── styles/             # Global styles
 └── api/                # API integration
