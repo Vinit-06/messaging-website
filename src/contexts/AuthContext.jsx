@@ -174,6 +174,14 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     setLoading(true)
     try {
+      // Check if we're in demo mode
+      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+        await new Promise(resolve => setTimeout(resolve, 500))
+        setUser(null)
+        setSession(null)
+        return { error: null }
+      }
+
       const { error } = await supabase.auth.signOut()
       if (error) throw error
       return { error: null }
