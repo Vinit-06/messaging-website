@@ -12,7 +12,7 @@ import {
   Check,
   RefreshCw
 } from 'lucide-react'
-import { useChat } from 'ai/react'
+import { useChat } from '../../hooks/useChat'
 import LoadingSpinner from '../LoadingSpinner'
 
 const AIFeaturesPanel = ({ onClose, activeChat }) => {
