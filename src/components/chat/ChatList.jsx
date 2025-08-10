@@ -134,19 +134,25 @@ const ChatList = ({ chats, activeChat, onChatSelect, onNewChat, collapsed }) => 
       </div>
 
       {/* Chat List */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto p-4 relative z-10">
         {filteredChats.length === 0 ? (
-          <div className="p-4 text-center text-gray-500">
-            {searchQuery ? 'No conversations found' : 'No conversations yet'}
+          <div className="p-8 text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageCircle className="w-10 h-10 text-gray-400" />
+            </div>
+            <p className="text-gray-500 font-medium">{searchQuery ? 'No conversations found' : 'No conversations yet'}</p>
+            <p className="text-gray-400 text-sm mt-1">Start a new conversation to get chatting!</p>
           </div>
         ) : (
-          <div className="space-y-1">
+          <div className="space-y-2">
             {filteredChats.map((chat) => (
               <button
                 key={chat.id}
                 onClick={() => onChatSelect(chat)}
-                className={`group w-full p-4 hover:bg-gray-50 transition-colors ${
-                  activeChat?.id === chat.id ? 'bg-blue-50 border-r-2 border-blue-500' : ''
+                className={`group w-full p-4 rounded-2xl transition-all duration-300 floating-element backdrop-blur-sm border ${
+                  activeChat?.id === chat.id
+                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-300/50 shadow-lg shadow-blue-500/20'
+                    : 'bg-white/40 border-white/30 hover:bg-white/60 hover:border-white/50 hover:shadow-md'
                 }`}
               >
                 <div className="flex items-start gap-3">
