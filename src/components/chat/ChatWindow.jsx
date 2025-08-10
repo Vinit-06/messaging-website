@@ -264,17 +264,19 @@ const ChatWindow = ({ chat, user }) => {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-6 space-y-4 relative z-10">
         {messages.map((message, index) => {
           const isLastMessage = index === messages.length - 1
-          const showTimestamp = index === 0 || 
+          const showTimestamp = index === 0 ||
             (new Date(message.timestamp) - new Date(messages[index - 1].timestamp)) > 5 * 60 * 1000
 
           return (
             <div key={message.id}>
               {showTimestamp && (
-                <div className="text-center text-xs text-gray-500 mb-4">
-                  {formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })}
+                <div className="text-center mb-6">
+                  <span className="inline-block px-4 py-2 text-xs text-gray-500 bg-white/40 backdrop-blur-sm rounded-full border border-white/30">
+                    {formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })}
+                  </span>
                 </div>
               )}
               <MessageBubble
@@ -285,24 +287,24 @@ const ChatWindow = ({ chat, user }) => {
             </div>
           )
         })}
-        
+
         {/* Typing Indicator */}
-        {Object.keys(chat.typingUsers || {}).some(key => 
+        {Object.keys(chat.typingUsers || {}).some(key =>
           isUserTyping(key.split('-')[1], chat.id) && key.split('-')[1] !== user.id
         ) && (
           <TypingIndicator />
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
 
       {/* Message Input */}
-      <div className="p-4 bg-white border-t border-gray-200">
-        <form onSubmit={handleSendMessage} className="flex items-center gap-3">
+      <div className="p-6 border-t border-white/20 backdrop-blur-sm relative z-10">
+        <form onSubmit={handleSendMessage} className="flex items-center gap-4">
           <button
             type="button"
             onClick={() => setShowFileUpload(true)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-3 hover:bg-white/20 rounded-xl transition-all duration-300 floating-element border border-white/10 hover:border-white/30 backdrop-blur-sm"
           >
             <Paperclip className="w-5 h-5 text-gray-600" />
           </button>
@@ -313,13 +315,13 @@ const ChatWindow = ({ chat, user }) => {
               type="text"
               value={newMessage}
               onChange={handleTyping}
-              placeholder="Type a message..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
+              placeholder="Type your message..."
+              className="w-full px-6 py-4 bg-white/60 border border-white/30 rounded-2xl focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 backdrop-blur-md pr-14 transition-all duration-300 placeholder:text-gray-500"
               maxLength={1000}
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 hover:bg-white/20 rounded-xl transition-all duration-300 backdrop-blur-sm"
             >
               <Smile className="w-5 h-5 text-gray-600" />
             </button>
@@ -328,10 +330,10 @@ const ChatWindow = ({ chat, user }) => {
           <button
             type="submit"
             disabled={!newMessage.trim()}
-            className={`p-3 rounded-full transition-all ${
+            className={`p-4 rounded-2xl transition-all duration-300 floating-element ${
               newMessage.trim()
-                ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 shadow-lg shadow-blue-500/25'
+                : 'bg-gray-200/50 text-gray-400 cursor-not-allowed backdrop-blur-sm'
             }`}
           >
             <Send className="w-5 h-5" />
