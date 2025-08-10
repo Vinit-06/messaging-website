@@ -144,28 +144,42 @@ const Sidebar = ({
       </nav>
 
       {/* User Profile & Logout */}
-      <div className="p-4 border-t border-gray-700">
-        <div className="space-y-2">
+      <div className="p-4 border-t border-white/10 backdrop-blur-sm relative z-10">
+        <div className="space-y-3">
           <button
             onClick={onShowUserProfile}
-            className={`w-full flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors ${
+            className={`group w-full flex items-center gap-3 p-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all duration-300 floating-element border border-transparent hover:border-white/20 backdrop-blur-sm ${
               collapsed ? 'justify-center' : ''
             }`}
             title={collapsed ? 'User Profile' : undefined}
           >
-            <Users className="w-5 h-5 flex-shrink-0" />
-            {!collapsed && <span className="font-medium">Profile</span>}
+            <div className="p-1 rounded-lg group-hover:bg-white/10 transition-all duration-300">
+              <Users className="w-4 h-4 flex-shrink-0" />
+            </div>
+            {!collapsed && (
+              <div className="flex flex-col items-start">
+                <span className="font-medium text-sm">Profile</span>
+                <span className="text-xs text-white/40">Manage account</span>
+              </div>
+            )}
           </button>
-          
+
           <button
             onClick={handleSignOut}
-            className={`w-full flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-red-600 hover:text-white transition-colors ${
+            className={`group w-full flex items-center gap-3 p-3 rounded-xl text-white/70 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-pink-500/20 hover:text-white transition-all duration-300 floating-element border border-transparent hover:border-red-400/30 backdrop-blur-sm ${
               collapsed ? 'justify-center' : ''
             }`}
             title={collapsed ? 'Sign Out' : undefined}
           >
-            <LogOut className="w-5 h-5 flex-shrink-0" />
-            {!collapsed && <span className="font-medium">Sign Out</span>}
+            <div className="p-1 rounded-lg group-hover:bg-red-500/20 transition-all duration-300">
+              <LogOut className="w-4 h-4 flex-shrink-0" />
+            </div>
+            {!collapsed && (
+              <div className="flex flex-col items-start">
+                <span className="font-medium text-sm">Sign Out</span>
+                <span className="text-xs text-white/40">Leave safely</span>
+              </div>
+            )}
           </button>
         </div>
       </div>
