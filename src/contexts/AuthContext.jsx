@@ -105,6 +105,18 @@ export const AuthProvider = ({ children }) => {
   const signUpWithEmail = async (email, password, metadata = {}) => {
     setLoading(true)
     try {
+      // Check if we're in demo mode
+      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        return {
+          data: {
+            user: null, // In demo mode, simulate email verification needed
+            session: null
+          },
+          error: null
+        }
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -127,6 +139,23 @@ export const AuthProvider = ({ children }) => {
   const signInWithProvider = async (provider) => {
     setLoading(true)
     try {
+      // Check if we're in demo mode
+      if (supabase.supabaseUrl === 'https://demo-project.supabase.co') {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        const demoUser = {
+          id: `demo-${provider}-user`,
+          email: `demo@${provider}.com`,
+          user_metadata: {
+            full_name: `Demo ${provider} User`,
+            avatar_url: `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=256&h=256&fit=face`
+          },
+          created_at: new Date().toISOString()
+        }
+        setUser(demoUser)
+        setSession({ user: demoUser })
+        return { data: { user: demoUser }, error: null }
+      }
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
