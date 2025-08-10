@@ -141,8 +141,12 @@ const MessageBubble = ({ message, isOwn, showStatus = false, onRetry }) => {
         </div>
 
         {/* Retry button for failed messages */}
-        {message.status === 'failed' && isOwn && (
-          <button className="text-xs text-red-600 hover:text-red-700 mt-1 px-1">
+        {message.status === 'failed' && isOwn && onRetry && (
+          <button
+            onClick={() => onRetry(message.id)}
+            className="text-xs text-red-600 hover:text-red-700 mt-1 px-2 py-1 rounded-lg hover:bg-red-50/50 transition-colors flex items-center gap-1"
+          >
+            <RotateCcw className="w-3 h-3" />
             Tap to retry
           </button>
         )}
