@@ -1,8 +1,8 @@
 import React from 'react'
-import { Check, CheckCheck, Clock, AlertCircle, Download, Eye } from 'lucide-react'
+import { Check, CheckCheck, Clock, AlertCircle, Download, Eye, RotateCcw } from 'lucide-react'
 import { format } from 'date-fns'
 
-const MessageBubble = ({ message, isOwn, showStatus = false }) => {
+const MessageBubble = ({ message, isOwn, showStatus = false, onRetry }) => {
   const formatTime = (timestamp) => {
     return format(new Date(timestamp), 'HH:mm')
   }
