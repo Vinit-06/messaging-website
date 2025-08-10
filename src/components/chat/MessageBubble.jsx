@@ -98,11 +98,11 @@ const MessageBubble = ({ message, isOwn, showStatus = false }) => {
         )}
         
         <div
-          className={`relative px-4 py-2 rounded-2xl ${
+          className={`relative px-5 py-3 ${
             isOwn
-              ? 'bg-blue-600 text-white animate-slide-in-right'
-              : 'bg-white text-gray-900 border border-gray-200 animate-slide-in-left'
-          } ${message.status === 'failed' ? 'bg-red-100 border-red-300' : ''}`}
+              ? 'glass-message-own animate-slide-in-right shadow-lg shadow-blue-500/20'
+              : 'glass-message-other animate-slide-in-left'
+          } ${message.status === 'failed' ? 'bg-red-100/80 border-red-300/50 backdrop-blur-sm' : ''}`}
         >
           {/* Message Content */}
           {message.type === 'text' ? (
